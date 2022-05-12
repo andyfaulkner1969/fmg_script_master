@@ -1,0 +1,6 @@
+config system interface
+edit port3
+set ip 3.3.3.3/24
+set allow access http https ping ssh
+end
+

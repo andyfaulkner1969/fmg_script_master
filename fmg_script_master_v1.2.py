@@ -37,7 +37,7 @@ logging.basicConfig(level=debug_flag, format='%(asctime)s:%(levelname)s:%(messag
 
 fmg_ip = "FMG IP ADDRESS"
 fmg_user = "FMG api user"
-fmg_passwd = "FMG api user password"
+fmg_passwd = getpass.getpass("Enter Password: ", stream=None)
 # The path variable below is the search directory to where preconfigured CLI scripts reside.
 # Default is . the same directory as where the script resides.  Change if different.
 path = "."

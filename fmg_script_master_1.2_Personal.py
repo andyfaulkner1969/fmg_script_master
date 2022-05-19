@@ -25,6 +25,7 @@ import urllib3
 import time
 import logging
 import os
+import getpass
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -37,7 +38,9 @@ logging.basicConfig(level=debug_flag, format='%(asctime)s:%(levelname)s:%(messag
 
 fmg_ip = "192.168.75.201"
 fmg_user = "api-user"
-fmg_passwd = "Danni1993!"
+
+fmg_passwd = getpass.getpass("Enter Password: ", stream=None)
+
 # The path variable below is the search directory to where preconfigured CLI scripts reside.
 # Default is . the same directory as where the script resides.  Change if different.
 path = "."
@@ -63,7 +66,6 @@ def fmg_login():
     global sid
     global url_base
     client = requests.session()
-
     payload = {
         "id": 1,
         "method": "exec",

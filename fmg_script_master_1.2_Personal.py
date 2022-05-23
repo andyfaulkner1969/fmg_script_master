@@ -40,21 +40,24 @@ logging.basicConfig(level=debug_flag, format='%(asctime)s:%(levelname)s:%(messag
 # To log to file comment the line above and uncomment the line below.
 # logging.basicConfig(filename=logging_file,level=logging.DEBUG,format='%(asctime)s:%(levelname)s:%(message)s')
 
+# Located in script_master.ini under settings.
+
 fmg_ip = parser.get('settings','fmg_ip')
 fmg_user = parser.get('settings','fmg_user')
 
 fmg_passwd = getpass.getpass("Enter Password: ", stream=None)
 
 # The path variable below is the search directory to where preconfigured CLI scripts reside.
-# Default is . the same directory as where the script resides.  Change if different.
+# Default is . the same directory as where the script resides.  Change if different. Located
+# in script_master.ini under settings.
+
 path = parser.get('directory','path')
 
 # This is an exclusion list of default ADOMs that are installed in FMG by default.  Adding to this list
-# will remove any ADOM from adom choice.
-adom_exclude = ["FortiAnalyzer", "FortiAuthenticator", "FortiCache", "FortiCarrier", "FortiClient",
-                "FortiDDoS", "FortiDeceptor", "FortiFirewall", "FortiFirewallCarrier", "FortiMail",
-                "FortiManager", "FortiNAC", "FortiProxy", "FortiSandbox", "FortiWeb", "Unmanaged_Devices",
-                "rootp", "others", "Syslog"]
+# will remove any ADOM from adom choice. Located in script_master.ini under settings
+
+adom_exclude = parser.get('settings','adom_exclude')
+
 # STATIC global variables do not change
 sid = ""
 adom_choice = ""

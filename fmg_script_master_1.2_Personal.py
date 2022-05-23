@@ -26,6 +26,10 @@ import time
 import logging
 import os
 import getpass
+from configparser import ConfigParser
+
+parser = ConfigParser()
+parser.read('script_master.ini')
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -36,14 +40,14 @@ logging.basicConfig(level=debug_flag, format='%(asctime)s:%(levelname)s:%(messag
 # To log to file comment the line above and uncomment the line below.
 # logging.basicConfig(filename=logging_file,level=logging.DEBUG,format='%(asctime)s:%(levelname)s:%(message)s')
 
-fmg_ip = "192.168.75.201"
-fmg_user = "api-user"
+fmg_ip = parser.get('settings','fmg_ip')
+fmg_user = parser.get('settings','fmg_user')
 
 fmg_passwd = getpass.getpass("Enter Password: ", stream=None)
 
 # The path variable below is the search directory to where preconfigured CLI scripts reside.
 # Default is . the same directory as where the script resides.  Change if different.
-path = "."
+path = parser.get('directory','path')
 
 # This is an exclusion list of default ADOMs that are installed in FMG by default.  Adding to this list
 # will remove any ADOM from adom choice.

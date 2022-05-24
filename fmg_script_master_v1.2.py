@@ -3,7 +3,7 @@
 """"
 FortiManager Script Executor
 
-This program will execute scripts on devices that reside on an FortiManager
+This program will execute cli scripts on devices that configured on an FortiManager
 
 by:
  ________         ____     _ __  ___           __              __
@@ -18,6 +18,7 @@ afaulkner@fortinet.com / evil@evilbast.com
 #  Version 1.2 - Features added - Ablility to run a script on all devices in an ADOM, 
 #   When running a script on all devices in an ADOM you can now log the script history
 #   to file <device_name>_script_history.log.
+#   Version 1.2.1 - Added configuraiton ini file 
 
 import requests
 import json
@@ -28,28 +29,47 @@ import os
 import getpass
 from configparser import ConfigParser
 
-from yaml import parse
-
-parser = ConfigParser()
-parser.read('script_master.ini')
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# Set flag to DEBUG to get full logging.
-debug_flag = logging.INFO
-logging_file = 'fmg_script.log'
-logging.basicConfig(level=debug_flag, format='%(asctime)s:%(levelname)s:%(message)s')
-# To log to file comment the line above and uncomment the line below.
-# logging.basicConfig(filename=logging_file,level=logging.DEBUG,format='%(asctime)s:%(levelname)s:%(message)s')
+# Config file script_master.ini must be set.
+parser = ConfigParser()
 
+try:
+    parser.read('script_master.ini')
+except:
+    logging.info("script_master.ini file is missing or really screwed up.")
+
+# DEBUG confgiuration 
+log_to_file = parser.get('debug','log_to_file')
+logging_file = parser.get('debug','log_file')
+debug_flag = parser.get('debug','debug')
+debug_log_path = parser.get('debug','debug_log_path')
+logging_path_and_file = debug_log_path + logging_file
+
+if debug_flag == "True":
+    debug_flag_set = logging.DEBUG
+else:
+    debug_flag_set = logging.INFO
+
+if log_to_file == "True":
+    logging.basicConfig(filename=logging_path_and_file,level=debug_flag_set,format='%(asctime)s:%(levelname)s:%(message)s')
+else:
+    logging.basicConfig(level=debug_flag_set,format='%(asctime)s:%(levelname)s:%(message)s')
+
+# FortiManager configuraiton
 fmg_ip = parser.get('settings','fmg_ip')
 fmg_user = parser.get('settings','fmg_user')
+# Look in script_master.ini to see if password has been set.  If not ask.
+fmg_passwd = parser.get('settings','fmg_passwd')
 
-fmg_passwd = getpass.getpass("Enter Password: ", stream=None)
-fmg_passwd = getpass.getpass("Enter Password: ", stream=None)
-# The path variable below is the search directory to where preconfigured CLI scripts reside.
-# Default is . the same directory as where the script resides.  Change if different.
-path = parser.get('directory','path')
+if fmg_passwd == "NONE":
+    fmg_passwd = getpass.getpass("Enter Password: ", stream=None)
+else:
+    pass
+
+# Path for CLI scripts
+
+cli_path = parser.get('directory','cli_path')
 
 # This is an exclusion list of default ADOMs that are installed in FMG by default.  Adding to this list
 # will remove any ADOM from adom choice.
@@ -387,7 +407,7 @@ def get_file_choice():
     logging.debug("**** Start of the get_file_choice function ****")
     #  Get a list of files
     file_list = []
-    for x in os.listdir(path):
+    for x in os.listdir(cli_path):
         if x.startswith("."):
             pass
         else:
@@ -439,7 +459,7 @@ def script_upload(script_name, script_desc, script):
     global sid
     global url_base
     global adom_choice
-    global path
+    global cli_path
     client = requests.session()
     payload = {
         "method": "add",

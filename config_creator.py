@@ -16,7 +16,9 @@ config['settings'] = {
 config.set('settings', '; Leave NONE if you want to use "GetPasswaord" on command line or hardcode to your password', '')
 
 config['debug'] = {
-    'debug':'False'
+    'debug':'False',
+    'log_to_file': 'Fasle',
+    'log_file':'script_master.log'
 }
 
 config['directory'] = {

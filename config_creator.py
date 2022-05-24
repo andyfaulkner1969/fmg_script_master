@@ -13,16 +13,17 @@ config['settings'] = {
     'fmg_passwd':'NONE'
 }
 
-config.set('settings', '; Leave NONE if you want to use "GetPasswaord" on command line or hardcode to your password', '')
+config.set('settings', '; Leave NONE if you want to use "GetPass" on command line or hardcode to your password', '')
 
 config['debug'] = {
     'debug':'False',
     'log_to_file': 'Fasle',
-    'log_file':'script_master.log'
+    'log_file':'script_master.log',
+    'debug_log_path':'./'
 }
 
 config['directory'] = {
-    'path':'./'
+    'cli_path':'./'
 }
 
 with open ('script_master.ini','w') as f:

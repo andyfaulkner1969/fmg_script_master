@@ -11,3 +11,6 @@ Create a script and upload to FMG on the fly
 Run a script on a device in an ADOM
 Run a script on all devcies in an ADOM
 It also logs the script history both to screen and log file.
+
+You will need to have both the script and the script_master.ini file.
+You will need to configure the script_master.ini file with your FMG settings.
